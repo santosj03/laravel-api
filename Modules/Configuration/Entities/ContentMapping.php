@@ -5,14 +5,18 @@ namespace Modules\Configuration\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ParameterConfig extends Model
+class ContentMapping extends Model
 {
     use SoftDeletes;
-    
-    protected $table = 'parameter_configs';
+
+    protected $table = 'content_mapping';
 
     protected $fillable = [
-        'name'
+        "code",
+        "error",
+        "sms",
+        "email_subject",
+        "email_body",
     ];
 
     protected $dates = [

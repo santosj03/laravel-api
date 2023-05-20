@@ -3,12 +3,14 @@
 namespace Modules\User\Services;
 
 use Carbon\Carbon;
+use App\Domain\GenericDomain;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Modules\User\Exceptions\LoginException;
 use Modules\User\Repositories\UserRepository;
 use Modules\Configuration\Domain\ConfigDomain;
-use Modules\Configuration\Services\SecurityConfigService;
+use Modules\Configuration\Services\ConfigurationService;
  
 class UserService 
 {
@@ -31,17 +33,14 @@ class UserService
     public function login($payload)
     {
         try {
-            JWTAuth::factory()->setTTL(SecurityConfigService::get(ConfigDomain::SESSION_TIMEOUT));
+            JWTAuth::factory()->setTTL(ConfigurationService::param(ConfigDomain::SESSION_TIMEOUT));
             if (!$token = JWTAuth::attempt($payload)) {
                 $this->userRepository->handleAttemps($payload['email']);
-                return response()->json([
-                	'message' => 'Login credentials are invalid.',
-                ], 400);
+
+                throw new LoginException(GenericDomain::ERR_LOGIN_CRED);
             }
         } catch (JWTException $e) {
-            return response()->json([
-                'message' => 'Could not create token.',
-            ], 500);
+            throw new LoginException(GenericDomain::ERR_LOGIN_TOKEN);
         }
 
         $user = $this->userRepository->findUser(Auth::id());

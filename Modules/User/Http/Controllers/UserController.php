@@ -27,10 +27,10 @@ class UserController extends Controller
  
     public function authenticate(LoginRequest $request)
     {
-        try{
+        // try{
             return $this->userService->login($request->payload());
-        }catch(\Exception $ex){
-            return response()->json(['message' => $ex->getMessage()], 500);
-        }
+        // }catch(\Exception $ex){
+        //     return response()->json(['message' => $ex->getMessage()], 500);
+        // }
     }
 }

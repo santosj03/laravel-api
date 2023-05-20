@@ -4,6 +4,7 @@ namespace Modules\Configuration\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Configuration\Database\Seeders\ContentMappingSeederTableSeeder;
 
 class ConfigurationDatabaseSeeder extends Seeder
 {
@@ -16,6 +17,6 @@ class ConfigurationDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $this->call(ContentMappingSeederTableSeeder::class);
     }
 }
